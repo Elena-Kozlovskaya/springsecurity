@@ -3,7 +3,10 @@ package com.kozlovskaya.springsecurity.controllers;
 import com.kozlovskaya.springsecurity.entities.User;
 import com.kozlovskaya.springsecurity.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
@@ -25,6 +28,7 @@ public class DemoController {
     public String authenticatedPage(){
         return "authenticated";
     }
+
     @GetMapping("/admin")
     public String adminPage(){
         return "admin";
@@ -35,5 +39,14 @@ public class DemoController {
         User user = userService.findByUsername(principal.getName()).orElseThrow(() -> new RuntimeException("Unable to find user by username: " + principal.getName()));
         return "Authenticated user info: " + user.getUsername() + " : " + user.getEmail();
     }
+
+    @PostMapping("/admin")
+    @PreAuthorize("hasAuthority('PERMISSION_WRITE')")
+    public User addProduct(@RequestBody User user){
+        userService.save(user);
+        return user;
+    }
+
+
 
 }

@@ -4,6 +4,7 @@ server:
     context-path: /dao_app
     session:
       timeout: 60s
+spring:
   jpa:
     show-sql: true
     hibernate:
