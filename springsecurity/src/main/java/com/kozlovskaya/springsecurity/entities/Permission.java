@@ -3,6 +3,7 @@ package com.kozlovskaya.springsecurity.entities;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Data
@@ -15,4 +16,10 @@ public class Permission {
 
     @Column(name = "name")
     private String name;
+
+    @ManyToMany
+    @JoinTable(name = "permissions_roles",
+            joinColumns = @JoinColumn(name = "permission_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Collection<Role> roles;
 }
